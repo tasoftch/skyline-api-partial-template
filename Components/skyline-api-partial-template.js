@@ -37,6 +37,32 @@
     else if(!Skyline && !Skyline.API)
         console.error("Package skyline/api-partial-template requires skyline/component-api");
     else {
+        Skyline.API.Partial = function(apiTarget, data) {
+            var request = Skyline.API.post(apiTarget, data);
+            request.responseHandler = function(xhr, request, failed) {
+                try {
+                    var data = xhr.responseText;
 
+                    for(var e=0;e<request.successCallbacks.length;e++) {
+                        request.successCallbacks[e].call(request, data);
+                    }
+                } catch (err) {
+                    failed(err);
+                }
+            };
+            return request;
+        }
+    }
+
+    $.fn.partial = function(apiTarget, data, replaceContents) {
+        $this = $(this);
+
+        return Skyline.API.Partial(apiTarget, data)
+            .success(function(content) {
+                if(replaceContents)
+                    $this.html(content);
+                else
+                    $this.append(content);
+            });
     }
 })(jQuery, window.Skyline);
