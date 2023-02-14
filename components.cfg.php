@@ -41,7 +41,6 @@ $apiFileJS = __DIR__ . "/Components/skyline-api-partial-template.js";
 return [
     "API-Partial" => [
         "js" => new JavaScriptPostLoadComponent(
-            CompilerContext::getCurrentCompiler()->getRelativeProjectPath($apiFileJS),
 			... AbstractComponent::makeLocalFileComponentArguments(
 			"/Public/js/skyline-api-partial-template.js",
 				$apiFileJS
