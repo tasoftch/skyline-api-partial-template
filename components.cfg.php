@@ -33,6 +33,7 @@
  */
 
 use Skyline\Compiler\CompilerContext;
+use Skyline\Component\Config\AbstractComponent;
 use Skyline\Component\Config\JavaScriptPostLoadComponent;
 
 $apiFileJS = __DIR__ . "/Components/skyline-api-partial-template.js";
@@ -40,10 +41,11 @@ $apiFileJS = __DIR__ . "/Components/skyline-api-partial-template.js";
 return [
     "API-Partial" => [
         "js" => new JavaScriptPostLoadComponent(
-            "/Public/js/skyline-api-partial-template.js",
-            'sha384-'.hash_file("sha384", $apiFileJS),
-            NULL,
-            CompilerContext::getCurrentCompiler()->getRelativeProjectPath($apiFileJS)
+            CompilerContext::getCurrentCompiler()->getRelativeProjectPath($apiFileJS),
+			... AbstractComponent::makeLocalFileComponentArguments(
+			"/Public/js/skyline-api-partial-template.js",
+				$apiFileJS
+			)
         ),
         "@require" => [
             "API"
